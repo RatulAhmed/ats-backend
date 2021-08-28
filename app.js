@@ -18,8 +18,6 @@ db
 /**Middleware */
 app.use(express.json())
 
-
-
 app.use((req, res, next) => {
     res.setHeader("Access-Control-Allow-Origin","*");
     res.setHeader("Access-Control-Allow-Headers",
@@ -29,8 +27,7 @@ app.use((req, res, next) => {
     "GET, POST, PATCH, DELETE, OPTIONS"
     );
     next();
-})
-
+});
 
 /* Routes  */
 app.post('/api/auth/signup', async(req, res, next) => {
@@ -43,6 +40,10 @@ app.post('/api/auth/signup', async(req, res, next) => {
         console.log(err);
         return res.status(500);
     }
-})
+});
+
+app.post('api/auth/login', async(req, res, next) => {
+    return res.json('response')
+});
 
 module.exports = app;
