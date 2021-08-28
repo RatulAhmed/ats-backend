@@ -1,5 +1,6 @@
 const Sequelize = require('sequelize');
 const db = require('../config/database');
+const bcrypt = require('bcrypt');
 
 const User = db.define('user', {
     email : {

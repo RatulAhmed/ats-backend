@@ -3,6 +3,7 @@ const express = require('express');
 const app = express();
 const User = require('./models/user');
 const db = require('./config/database');
+const bcrypt = require('bcrypt');
 
 
 db
@@ -17,6 +18,8 @@ db
 /**Middleware */
 app.use(express.json())
 
+
+
 app.use((req, res, next) => {
     res.setHeader("Access-Control-Allow-Origin","*");
     res.setHeader("Access-Control-Allow-Headers",
@@ -28,11 +31,11 @@ app.use((req, res, next) => {
     next();
 })
 
+
 /* Routes  */
 app.post('/api/auth/signup', async(req, res, next) => {
-
+    req.body.password = await bcrypt.hash(req.body.password, 10);
     const {email, username, password } = req.body;
-    console.log(req.body);
     try {
         const user = await User.create({email, username, password})
         return res.json(user);
@@ -40,11 +43,6 @@ app.post('/api/auth/signup', async(req, res, next) => {
         console.log(err);
         return res.status(500);
     }
-    // const myRes = 
-    // {
-    //     message: "User has been created"
-    // }
-    res.status(200).json(myRes);
 })
 
 module.exports = app;
