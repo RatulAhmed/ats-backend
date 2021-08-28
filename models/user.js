@@ -4,13 +4,16 @@ const bcrypt = require('bcrypt');
 
 const User = db.define('user', {
     email : {
-        type: Sequelize.DataTypes.STRING
+        type: Sequelize.DataTypes.STRING,
+        allowNull: false
     },
     username : {
-        type: Sequelize.DataTypes.STRING
+        type: Sequelize.DataTypes.STRING,
+        allowNull: false
     },
     password : {
-        type: Sequelize.DataTypes.STRING
+        type: Sequelize.DataTypes.STRING,
+        allowNull: false
     },
     role : {
         type:  Sequelize.DataTypes.STRING
