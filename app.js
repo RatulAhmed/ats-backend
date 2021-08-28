@@ -4,7 +4,7 @@ const app = express();
 const User = require('./models/user');
 const db = require('./config/database');
 const bcrypt = require('bcrypt');
-
+const cors = require('cors');
 
 db
   .authenticate()
@@ -17,17 +17,9 @@ db
 
 /**Middleware */
 app.use(express.json())
+app.use(cors());
+app.options('*', cors());
 
-app.use((req, res, next) => {
-    res.setHeader("Access-Control-Allow-Origin","*");
-    res.setHeader("Access-Control-Allow-Headers",
-    "Origin, X-Requested-With, Content-Type, Accept"
-    );
-    res.setHeader("Access-Control-Allow-Methods",
-    "GET, POST, PATCH, DELETE, OPTIONS"
-    );
-    next();
-});
 
 /* Routes  */
 app.post('/api/auth/signup', async(req, res, next) => {
@@ -42,7 +34,7 @@ app.post('/api/auth/signup', async(req, res, next) => {
     }
 });
 
-app.post('api/auth/login', async(req, res, next) => {
+app.post('/api/auth/login', async(req, res, next) => {
     return res.json('response')
 });
 
