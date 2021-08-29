@@ -35,7 +35,30 @@ app.post('/api/auth/signup', async(req, res, next) => {
 });
 
 app.post('/api/auth/login', async(req, res, next) => {
-    return res.json('response')
+    console.log(req.body)
+    user = await User.findOne({
+        where: {
+            email: req.body.email
+        }
+    })
+    // console.log('The user is ', user);
+    // console.log('The user\'s hashed password is ', user.password);
+    
+    try {
+        result = await bcrypt.compare(req.body.password, user.password);
+    } catch(err){
+        console.log(err);
+    }
+
+    if(result === true) {
+        return res.status(200).json(user);
+    }
+    else {
+        return res.status(404).json({
+            message: "Incorrect password/email combination"
+        })
+    }
+
 });
 
 module.exports = app;
