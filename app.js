@@ -5,6 +5,8 @@ const User = require('./models/user');
 const db = require('./config/database');
 const bcrypt = require('bcrypt');
 const cors = require('cors');
+const jwt = require('jsonwebtoken');
+const checkAuth = require('./middleware/check-auth');
 
 db
   .authenticate()
@@ -40,10 +42,7 @@ app.post('/api/auth/login', async(req, res, next) => {
         where: {
             email: req.body.email
         }
-    })
-    // console.log('The user is ', user);
-    // console.log('The user\'s hashed password is ', user.password);
-    
+    })    
     try {
         result = await bcrypt.compare(req.body.password, user.password);
     } catch(err){
@@ -51,14 +50,28 @@ app.post('/api/auth/login', async(req, res, next) => {
     }
 
     if(result === true) {
-        return res.status(200).json(user);
+        const token = jwt.sign(
+            { email: user.email, userId: user.id}, 
+            'our_json_secret', 
+            { expiresIn: '1h'});
+
+        
+        return res.status(200).json({
+            user: user,
+            token: token
+        });
     }
     else {
         return res.status(404).json({
             message: "Incorrect password/email combination"
         })
     }
-
 });
+
+app.get('/api/auth/test',
+checkAuth,
+(req, res, next) =>{
+    res.status(200).json({message: 'We verified the token is correct'});
+})
 
 module.exports = app;
