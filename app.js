@@ -37,7 +37,7 @@ app.post('/api/auth/signup', async(req, res, next) => {
 });
 
 app.post('/api/auth/login', async(req, res, next) => {
-    console.log(req.body)
+    console.log(req.headers.authorization)
     user = await User.findOne({
         where: {
             email: req.body.email
