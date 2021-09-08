@@ -4,7 +4,8 @@ const app = express();
 const db = require('./config/database');
 const cors = require('cors');
 const authRoutes = require('./routes/auth');
-const oddRoutes = require('./routes/admin');
+const adminRoutes = require('./routes/admin');
+const oddRoutes = require('./routes/odd');
 
 /* Database Connection */
 db
@@ -23,5 +24,7 @@ app.options('*', cors());
 
 /* Routes */
 app.use('/api/auth', authRoutes);
+app.use('/api/admin', adminRoutes);
 app.use('/api/odd', oddRoutes);
+
 module.exports = app;
