@@ -24,7 +24,7 @@ const Odd = db.define('odd', {
         allowNull: false
     },
     winner : {
-        type: Sequelize.DataTypes.away_team || Sequelize.DataTypes.home_team || null
+        type: Sequelize.DataTypes.away_team || Sequelize.DataTypes.home_team || 'push'
     },
     isLocked: {
         type: Sequelize.DataTypes.BOOLEAN,

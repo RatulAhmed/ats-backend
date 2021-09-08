@@ -4,7 +4,7 @@ const app = express();
 const db = require('./config/database');
 const cors = require('cors');
 const authRoutes = require('./routes/auth');
-const oddRoutes = require('./routes/odd');
+const oddRoutes = require('./routes/admin');
 
 /* Database Connection */
 db
