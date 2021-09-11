@@ -38,8 +38,10 @@ router.post('/login', async(req, res, next) => {
             'our_json_secret', 
             { expiresIn: '1h'});
         return res.status(200).json({
-            user: user,
-            token: token
+            userId: user.id,
+            token: token,
+            expiresIn: 3600,
+            username: user.username
         });
     }
     else {
