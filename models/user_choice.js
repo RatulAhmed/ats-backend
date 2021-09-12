@@ -10,7 +10,7 @@ const User_Choice = db.define('user_choice', {
         references: {
             model: Odd,
             key: 'id'
-        }
+        },
 
     },
     user_id: {
