@@ -6,6 +6,7 @@ const cors = require('cors');
 const authRoutes = require('./routes/auth');
 const adminRoutes = require('./routes/admin');
 const oddRoutes = require('./routes/odd');
+const userChoiceRoutes = require('./routes/user_choice')
 
 /* Database Connection */
 db
@@ -26,5 +27,6 @@ app.options('*', cors());
 app.use('/api/auth', authRoutes);
 app.use('/api/admin', adminRoutes);
 app.use('/api/odd', oddRoutes);
+app.use('/api/userChoice', userChoiceRoutes);
 
 module.exports = app;
