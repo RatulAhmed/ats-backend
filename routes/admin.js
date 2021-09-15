@@ -41,7 +41,7 @@ router.get('updateOdd', async(req, res, next) => {
                 }, { where: {
                     home_team: homeTeam,
                     away_team: awayTeam,
-                    week: '1' //TODO this needs to come from config tables
+                    week: '2' //TODO this needs to come from config tables
                 }})
             }
         })
