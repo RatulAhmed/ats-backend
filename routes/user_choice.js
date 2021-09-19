@@ -12,14 +12,15 @@ router.post('', async(req, res, next) => {
             const [choice, created] = await User_Choice.findOrCreate({
                 where : {
                   odd_id :req.body[i].odd_id,
-                  user_id: req.body[i].user_id 
+                  user_id: req.body[i].user_id
                 }
             })
             console.log('The object from query', choice)
             choice.selection = req.body[i].selection;
             choice.save();
         }   
-        return res.json('success')
+        return res.json({
+            message: 'Your Selections Have Been Saved'})
     } catch(error) {
         return res.json({
             error: error,

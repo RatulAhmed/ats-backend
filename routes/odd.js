@@ -43,9 +43,8 @@ router.get('/:user_id', async(req, res, next) => {
         });
         return res.json(choices);
     } catch(err) {
+        return res.json(err);
     }
-    return res.json('Succesfully returned your choices');
-
 });
 
 module.exports = router;
