@@ -1,6 +1,5 @@
 const Sequelize = require('sequelize');
 const db = require('../config/database');
-const User = require('../models/user');
 
 const Odd = db.define('odd', {
 
@@ -33,5 +32,5 @@ const Odd = db.define('odd', {
     }
 });
 
-User.hasMany(Odd);
+
 module.exports = Odd;
