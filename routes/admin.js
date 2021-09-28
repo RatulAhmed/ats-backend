@@ -19,8 +19,11 @@ router.get('/updateOdd', async(req, res, next) => {
         attributes: ['currentWeek']
     })
 
-    const numGames = 0;
-    console.log(config.currentWeek)
+    const numGames = await Odd.count({
+        where: {
+            week: config.currentWeek
+        }
+    })
 
     let data = "";
     https.get(url + '' + apiKey, res =>{
@@ -33,8 +36,7 @@ router.get('/updateOdd', async(req, res, next) => {
             let json = JSON.parse(data); 
             let homeTeam, awayTeam, homeSpread, awaySpread;
             
-            /* TODO - currently hardcoded as 16 - get number of games for the curr week */
-            for(i = 0; i < 16; i++) {
+            for(i = 0; i < numGames; i++) {
                 homeTeam = json[i].home_team;
                 awayTeam = json[i].away_team;
 
@@ -54,7 +56,7 @@ router.get('/updateOdd', async(req, res, next) => {
                 }, { where: {
                     home_team: homeTeam,
                     away_team: awayTeam,
-                    week: config.currentWeek //TODO this needs to come from config tables
+                    week: config.currentWeek
                 }})
             }
         })
@@ -70,13 +72,22 @@ router.get('/updateOdd', async(req, res, next) => {
 // this will only ever be called after scores have been already updated
 router.get('/updateScores',async(req, res, next) => {
     try {
+
+    const config = await Config.findOne({
+        where : {
+            id: 1,
+        },
+        attributes: ['currentWeek']
+    })
+
+        
     let odds = await Choice.findAll({
         where : {
         },
         include:[{ 
             attributes: ['winner'],
             model: Odd,
-            where: { week:'3'}
+            where: { week: config.currentWeek }
         }],
     })
 
