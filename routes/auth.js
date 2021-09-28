@@ -5,7 +5,7 @@ const router = express.Router();
 const checkAuth = require('../middleware/check-auth');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
-
+const Score = require('../models/score');
 const User = require('../models/user');
 
 router.post('/signup', async(req, res, next) => {
@@ -13,6 +13,7 @@ router.post('/signup', async(req, res, next) => {
     const {email, username, password } = req.body;
     try {
         const user = await User.create({email, username, password})
+        await Score.create({user_id: user.id, score: 0})
         return res.json(user);
     } catch(err){
         console.log(err);

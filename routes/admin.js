@@ -3,12 +3,25 @@ const https = require('https');
 const router = express.Router();
 
 const Odd = require('../models/odd');
-
+const Score = require('../models/score')
+const Choice = require('../models/user_choice');
+const Config = require('../models/nfl_config');
 const apiKey = '4123da3ce51d33a0a5733928bda4fdbe';
 const url = 'https://api.the-odds-api.com/v4/sports/americanfootball_nfl/odds/?regions=us&oddsFormat=american&markets=spreads&apiKey='
 
 
 router.get('/updateOdd', async(req, res, next) => {
+
+    const config = await Config.findOne({
+        where : {
+            id: 1,
+        },
+        attributes: ['currentWeek']
+    })
+
+    const numGames = 0;
+    console.log(config.currentWeek)
+
     let data = "";
     https.get(url + '' + apiKey, res =>{
         
@@ -41,7 +54,7 @@ router.get('/updateOdd', async(req, res, next) => {
                 }, { where: {
                     home_team: homeTeam,
                     away_team: awayTeam,
-                    week: '3' //TODO this needs to come from config tables
+                    week: config.currentWeek //TODO this needs to come from config tables
                 }})
             }
         })
@@ -54,7 +67,61 @@ router.get('/updateOdd', async(req, res, next) => {
 })
 
 
-// we need a a route to trigger - update scores
+// this will only ever be called after scores have been already updated
+router.get('/updateScores',async(req, res, next) => {
+    try {
+    let odds = await Choice.findAll({
+        where : {
+        },
+        include:[{ 
+            attributes: ['winner'],
+            model: Odd,
+            where: { week:'3'}
+        }],
+    })
+
+    let map = new Map();
+    for(let i = 0; i < odds.length; i++) {
+        if(map.get(odds[i].user_id) === undefined) {
+            map.set(odds[i].user_id, 0);
+            let currPoints = map.get(odds[i].user_id);
+            if(odds[i].selection === odds[i].odd.winner) {
+                map.set(odds[i].user_id, 1 + currPoints);
+            }
+            if (odds[i].odd.winner === 'Push') {
+                map.set(odds[i].user_id, 0.5 + currPoints);
+            }
+        }
+        else {
+            let currPoints = map.get(odds[i].user_id);
+            if(odds[i].selection === odds[i].odd.winner) {
+                map.set(odds[i].user_id, 1 + currPoints);
+            } 
+            if (odds[i].odd.winner === 'Push') {
+                map.set(odds[i].user_id, 0.5 + currPoints);
+            }
+        }
+    }    
+    for(const [key,value] of map.entries()) {
+        console.log(key, value)
+        try {
+            await Score.increment({
+                score: + value,
+            }, 
+            {
+                where : {
+                    user_id: key
+                }
+            })
+        } catch(err) {
+            console.log(err)
+        }
+    }
+    return res.json('Scores have been updated');
+} catch(err) {
+    return res.json(err);
+}
+})
 
 
 // we need a route to trigger - lock all odds for current week - lock odd for thursday?
