@@ -11,7 +11,11 @@ router.get('', async (req, res, next) => {
             include: [{
                 model: User,
                 attributes: ['username']
-            }]
+            }],
+            attributes : ['score'],
+            order: [
+                ['score', 'DESC']
+            ]
         });
         return res.json(scores);
     } catch(err) {
