@@ -32,4 +32,5 @@ const Odd = db.define('odd', {
     }
 });
 
+
 module.exports = Odd;
