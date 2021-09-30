@@ -15,9 +15,17 @@ router.post('', async(req, res, next) => {
                   user_id: req.body[i].user_id
                 }
             })
-            console.log('The object from query', choice)
             choice.selection = req.body[i].selection;
+            if(req.body[i].selection === null || req.body[i].selection === 'No Selection') {
+                User_Choice.destroy({
+                    where: {
+                        odd_id :req.body[i].odd_id,
+                        user_id: req.body[i].user_id
+                    }
+                })
+            } else {
             choice.save();
+            }
         }   
         return res.json({
             message: 'Your Selections Have Been Saved'})
@@ -28,6 +36,26 @@ router.post('', async(req, res, next) => {
         });
     }
 })
+
+router.get('/:user_id', async(req, res, next) => { 
+    try {
+        const choices = await User_Choice.findAll({
+            where: {
+                user_id: req.params.user_id
+            },
+            include: [{
+                model: Odd,
+                where: {week: '4' },
+                attributes: []
+            }]
+        });
+        return res.json(choices);
+    } catch(err) {
+        return res.json(err);
+    }
+});
+
+
 
 
 module.exports = router;
