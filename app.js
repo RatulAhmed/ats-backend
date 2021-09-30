@@ -7,6 +7,7 @@ const authRoutes = require('./routes/auth');
 const adminRoutes = require('./routes/admin');
 const oddRoutes = require('./routes/odd');
 const userChoiceRoutes = require('./routes/user_choice')
+const scoreRoutes = require('./routes/score');
 
 /* Database Connection */
 db
@@ -28,5 +29,5 @@ app.use('/api/auth', authRoutes);
 app.use('/api/admin', adminRoutes);
 app.use('/api/odd', oddRoutes);
 app.use('/api/userChoice', userChoiceRoutes);
-
+app.use('/api/score', scoreRoutes);
 module.exports = app;

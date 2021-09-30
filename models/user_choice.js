@@ -3,6 +3,7 @@ const db = require('../config/database');
 const User = require('../models/user');
 const Odd = require('./odd');
 
+
 const User_Choice = db.define('user_choice', {
 
     odd_id: {
@@ -24,5 +25,11 @@ const User_Choice = db.define('user_choice', {
         type: Sequelize.DataTypes.STRING
     }
 });
+
+User_Choice.belongsTo(Odd, {
+    foreignKey: 'odd_id',
+    sourceKey: 'odd_id'
+})
+
 
 module.exports= User_Choice;
