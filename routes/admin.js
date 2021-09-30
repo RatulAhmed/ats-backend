@@ -50,6 +50,7 @@ router.get('/updateOdd', async(req, res, next) => {
                         homeSpread = json[i].bookmakers[2].markets[0].outcomes[1].point;
                     }
                 }
+                // todo make this async
                 Odd.update({
                     home_spread: homeSpread,
                     away_spread: awaySpread
