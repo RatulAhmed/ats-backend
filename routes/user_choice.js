@@ -40,7 +40,7 @@ router.post('', async(req, res, next) => {
 router.get('/:user_id', async(req, res, next) => { 
     try {
 
-        const config = await Config.findOne({
+        const config = await Nfl_config.findOne({
             where : {
                 id: 1,
             },
