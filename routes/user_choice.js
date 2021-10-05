@@ -39,13 +39,21 @@ router.post('', async(req, res, next) => {
 
 router.get('/:user_id', async(req, res, next) => { 
     try {
+
+        const config = await Config.findOne({
+            where : {
+                id: 1,
+            },
+            attributes: ['currentWeek']
+        })
+
         const choices = await User_Choice.findAll({
             where: {
                 user_id: req.params.user_id
             },
             include: [{
                 model: Odd,
-                where: {week: '4' },
+                where: {week: config.currentWeek },
                 attributes: []
             }]
         });
